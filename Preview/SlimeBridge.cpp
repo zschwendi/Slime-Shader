@@ -27,7 +27,7 @@ void slime_renderer_destroy(SlimeRenderer *renderer) {
     delete renderer;
 }
 
-bool slime_renderer_copy_rgba(SlimeRenderer *renderer, double elapsed_seconds,
+bool slime_renderer_copy_rgba(SlimeRenderer *renderer, double elapsed_seconds, bool goop,
                               uint8_t *destination, size_t capacity) {
     if (!renderer || !destination || !std::isfinite(elapsed_seconds)) {
         return false;
@@ -39,7 +39,10 @@ bool slime_renderer_copy_rgba(SlimeRenderer *renderer, double elapsed_seconds,
         return false;
     }
     try {
-        renderer->shader.RainbowWave(elapsed_seconds);
+        if (goop)
+            renderer->shader.RainbowGoop(elapsed_seconds);
+        else
+            renderer->shader.RainbowWave(elapsed_seconds);
         size_t offset = 0;
         for (int row = 0; row < height; ++row) {
             for (int column = 0; column < width; ++column) {

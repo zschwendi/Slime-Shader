@@ -14,8 +14,8 @@ SlimeRenderer *slime_renderer_create(int height, int width,
 void slime_renderer_destroy(SlimeRenderer *renderer);
 
 // The caller owns the buffer. Each pixel uses four bytes: red, green, blue, alpha.
-// Time is in seconds, matching SlimeShader::RainbowWave.
-bool slime_renderer_copy_rgba(SlimeRenderer *renderer, double elapsed_seconds,
+// Time is in seconds. Goop selects RainbowGoop instead of RainbowWave.
+bool slime_renderer_copy_rgba(SlimeRenderer *renderer, double elapsed_seconds, bool goop,
                               uint8_t *destination, size_t capacity);
 
 #ifdef __cplusplus

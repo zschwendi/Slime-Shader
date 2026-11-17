@@ -15,5 +15,7 @@ SlimeShader(int height, int width, double density, double speed);//constructor -
 
 void RainbowWave(double elapsed_seconds);// recieves a value in seconds of where to start animating from. 
 
+void RainbowGoop(double elapsed_seconds);// bends the rainbow into moving goop
+
 };
 

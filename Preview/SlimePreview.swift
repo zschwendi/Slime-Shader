@@ -27,6 +27,7 @@ private final class PreviewModel: ObservableObject {
     @Published private(set) var elapsedSeconds = 0.0
     @Published private(set) var frameCount = 0
     @Published private(set) var error: String?
+    @Published var useGoop = false
 
     private let renderer: NativeRenderer?
     private var pixels: [UInt8]
@@ -49,7 +50,7 @@ private final class PreviewModel: ObservableObject {
         guard let renderer, let startedAt else { return }
         let seconds = ProcessInfo.processInfo.systemUptime - startedAt
         let copied = pixels.withUnsafeMutableBufferPointer { buffer in
-            slime_renderer_copy_rgba(renderer.pointer, seconds, buffer.baseAddress, buffer.count)
+            slime_renderer_copy_rgba(renderer.pointer, seconds, useGoop, buffer.baseAddress, buffer.count)
         }
         guard copied else {
             error = "The C++ renderer could not supply a frame."
@@ -85,6 +86,13 @@ private struct PreviewView: View {
 
     var body: some View {
         VStack(spacing: 10) {
+            Picker("Effect", selection: $model.useGoop) {
+                Text("RainbowWave").tag(false)
+                Text("RainbowGoop").tag(true)
+            }
+            .pickerStyle(.segmented)
+            .frame(width: 320)
+
             ZStack {
                 Color.black
                 if let image = model.image {
@@ -106,7 +114,7 @@ private struct PreviewView: View {
             if let error = model.error {
                 Text(error).foregroundStyle(.red)
             } else {
-                Text("Every frame comes from SlimeShader::RainbowWave(seconds).")
+                Text("Every frame comes from SlimeShader::\(model.useGoop ? "RainbowGoop" : "RainbowWave")(seconds).")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }

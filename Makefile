@@ -1,37 +1,17 @@
-CXX := clang++
-SWIFTC := xcrun swiftc
-CPPFLAGS := -I.
-MACOS_MIN := 13.0
-CXXFLAGS := -std=c++11 -O2 -Wall -Wextra -MMD -MP -mmacosx-version-min=$(MACOS_MIN)
-ARCH := $(shell uname -m)
+all: slime
 
-BUILD_DIR := .build
-APP := $(BUILD_DIR)/SlimePreview.app
-PREVIEW := $(APP)/Contents/MacOS/SlimePreview
-SOURCES := Image.cpp Slime_Shader.cpp Preview/SlimeBridge.cpp
-OBJECTS := $(addprefix $(BUILD_DIR)/obj/,$(SOURCES:.cpp=.o))
+slime: main.o Image.o Slime_Shader.o
+	g++ main.o Image.o Slime_Shader.o -o slime
 
-.PHONY: all preview clean
+main.o: main.cpp Slime_Shader.h Image.h Makefile
+	g++ -std=c++11 -O2 -Wall -Wextra -c main.cpp -o main.o
 
-all: $(PREVIEW)
+Image.o: Image.cpp Image.h Makefile
+	g++ -std=c++11 -O2 -Wall -Wextra -c Image.cpp -o Image.o
 
-preview: $(PREVIEW)
-	open "$(APP)"
+Slime_Shader.o: Slime_Shader.cpp Slime_Shader.h Image.h Makefile
+	g++ -std=c++11 -O2 -Wall -Wextra -c Slime_Shader.cpp -o Slime_Shader.o
 
-$(PREVIEW): $(OBJECTS) Preview/SlimePreview.swift Preview/SlimeBridge.h Preview/Info.plist
-	mkdir -p "$(@D)"
-	cp Preview/Info.plist "$(APP)/Contents/Info.plist"
-	$(SWIFTC) -swift-version 6 -parse-as-library -O \
-		-target $(ARCH)-apple-macos$(MACOS_MIN) \
-		-import-objc-header Preview/SlimeBridge.h \
-		Preview/SlimePreview.swift $(OBJECTS) -lc++ \
-		-framework SwiftUI -framework AppKit -framework CoreGraphics -o "$@"
-
-$(BUILD_DIR)/obj/%.o: %.cpp Makefile
-	mkdir -p "$(@D)"
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c "$<" -o "$@"
-
+.PHONY: all clean
 clean:
-	rm -rf "$(BUILD_DIR)"
-
--include $(OBJECTS:.o=.d)
+	rm -f main.o Image.o Slime_Shader.o slime

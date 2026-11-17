@@ -1,5 +1,6 @@
 # Prerequisites
 *.d
+.DS_Store
 
 # Compiled Object files
 *.slo
@@ -33,3 +34,5 @@
 
 # Local preview builds
 /.build/
+/Preview/.build/
+/slime
