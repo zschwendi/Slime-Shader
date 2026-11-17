@@ -106,7 +106,7 @@ private struct PreviewView: View {
             if let error = model.error {
                 Text(error).foregroundStyle(.red)
             } else {
-                Text("Every frame comes from SlimeShader::RenderSlime(seconds).")
+                Text("Every frame comes from SlimeShader::RainbowWave(seconds).")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }

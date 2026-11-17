@@ -39,7 +39,7 @@ bool slime_renderer_copy_rgba(SlimeRenderer *renderer, double elapsed_seconds,
         return false;
     }
     try {
-        renderer->shader.RenderSlime(elapsed_seconds);
+        renderer->shader.RainbowWave(elapsed_seconds);
         size_t offset = 0;
         for (int row = 0; row < height; ++row) {
             for (int column = 0; column < width; ++column) {

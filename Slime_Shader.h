@@ -13,7 +13,7 @@ class SlimeShader : public Image{
 
 SlimeShader(int height, int width, double density, double speed);//constructor -returns nothing, passes height/width to image parent class
 
-void RenderSlime(double elapsed_seconds);// recieves a value in seconds of where to start animating from. 
+void RainbowWave(double elapsed_seconds);// recieves a value in seconds of where to start animating from. 
 
 };
 
